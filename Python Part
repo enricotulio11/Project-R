@@ -1,0 +1,106 @@
+# Projeto-R
+Trabalho da faculdade sobre a caracterização de uma biblioteca de compostos químicos
+# Library where the work consists-------->https://www.chemdiv.com/catalog/diversity-libraries/smarttm-library/
+
+pip install rdkit
+pip install pandas 
+import pandas as pd
+import numpy as np
+from rdkit import Chem
+from rdkit.Chem.Lipinski import RingCount
+from rdkit.Chem.Lipinski import NumHAcceptors
+from rdkit.Chem.Lipinski import NumHDonors
+from rdkit.Chem.Lipinski import NumRotatableBonds
+from rdkit.Chem import Descriptors
+from rdkit.Chem import PandasTools
+from rdkit.Chem import Descriptors, Crippen, Lipinski, MolSurf, rdMolDescriptors, MACCSkeys
+from rdkit.Chem.Descriptors import ExactMolWt
+from rdkit.Chem.Descriptors import TPSA
+from rdkit.Chem.Crippen import MolLogP
+from rdkit.Chem.ChemUtils import SDFToCSV
+import csv
+from rdkit import Chem, RDLogger
+from rdkit.Chem import Descriptors, MolSurf, rdMolDescriptors, AllChem, Draw
+
+SmartTM = '/content/SmartTM_Library.sdf'
+df = PandasTools.LoadSDF(SmartTM)
+
+sdf_file1 = SmartTM
+
+df.head()
+
+df.info()
+
+suppl = Chem.SDMolSupplier('/content/SmartTM_Library.sdf')
+n_mols = len(suppl)
+
+### ExactMolWt
+i = suppl[0]
+print(i.GetNumAtoms())
+
+teste = i.GetPropNames()
+for j in teste:
+    print(j)
+
+for j in suppl:
+  print(ExactMolWt(j))
+
+print(Descriptors.ExactMolWt(i))
+
+### Smile
+m = Chem.MolFromMolFile(SmartTM)
+Chem.MolToSmiles(m)
+
+### NumHAcceptors
+Lipinski.NumHAcceptors(m)
+
+### NumHDonors
+Lipinski.NumHDonors(m)
+
+### NumRotatableBonds
+Lipinski.NumRotatableBonds(m)
+
+### TPSA
+Descriptors.TPSA(m)
+
+### MolLogP
+Descriptors.MolLogP(m)
+
+### RingCount
+Lipinski.RingCount(m)
+
+### Calculation of the Descriptors of each Molecule
+all_mols = Chem.SDMolSupplier(sdf_file1)
+mol = all_mols[0]
+
+all_mols = Chem.SDMolSupplier(sdf_file1)
+nmols = len(all_mols)
+cont_error = 0
+str_csv_file = ''
+print(nmols)
+
+dados = []
+dados.append(Chem.MolToSmiles(mol))
+dados.append(rdMolDescriptors.CalcMolFormula(mol))
+dados.append(round(Descriptors.ExactMolWt(mol),2))
+dados.append(round(Descriptors.MolLogP(mol),2))
+dados.append(Descriptors.NumHAcceptors(mol))
+dados.append(Descriptors.NumHDonors(mol))
+dados.append(rdMolDescriptors.CalcNumRotatableBonds(mol))
+dados.append(Descriptors.RingCount(mol))
+dados.append(round(MolSurf.TPSA(mol),2))
+Chem.MolToMolBlock
+
+print(str(dados))
+
+###
+str_csv_file = ''
+for mol in all_mols:
+  if mol is not None:
+    try:
+      str_csv_file= ''-join([str_csv_file, '.'.join([str(Chem.MolToSmiles(mol)), str(rdMolDescriptors.CalcMolFormula(mol)), str(round(Descriptors.ExactMolWt(mol),2)), str(round(Descriptors.MolLogP(mol),2)), str(Descriptors.NumHAcceptors(mol)), str(Descriptors.NumHDonors(mol)), str(rdMolDescriptors.CalcNumRotatableBonds(mol)), str(Descriptors.RingCount(mol)), str(round(MolSurf.TPSA(mol),2)))]]
+      except:
+        cont_error +- 1
+print('str_csv_file ready', cont_error)        
+open('SmartTM', 'w').write(str_csv_file)
+print('file ready')
