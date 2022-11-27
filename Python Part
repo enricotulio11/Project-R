@@ -93,14 +93,15 @@ Chem.MolToMolBlock
 
 print(str(dados))
 
-###
+### Converting to CSV
 str_csv_file = ''
 for mol in all_mols:
   if mol is not None:
     try:
-      str_csv_file= ''-join([str_csv_file, '.'.join([str(Chem.MolToSmiles(mol)), str(rdMolDescriptors.CalcMolFormula(mol)), str(round(Descriptors.ExactMolWt(mol),2)), str(round(Descriptors.MolLogP(mol),2)), str(Descriptors.NumHAcceptors(mol)), str(Descriptors.NumHDonors(mol)), str(rdMolDescriptors.CalcNumRotatableBonds(mol)), str(Descriptors.RingCount(mol)), str(round(MolSurf.TPSA(mol),2)))]]
-      except:
+      str_csv_file = ''.join([str_csv_file, ','.join([str(Chem.MolToSmiles(mol)),str(round(Descriptors.MolLogP(mol),2)),str(Descriptors.NumHAceeptors(mol)),str(NumHDonors(mol)),str(rdMolDescriptors.CalcNumRotatableBonds(mol)),str(Descriptors.RingCount(mol)),str(round(MolSurf.TPSA(mol),2))]), '\n '])
+    except:
         cont_error +- 1
 print('str_csv_file ready', cont_error)        
 open('SmartTM', 'w').write(str_csv_file)
 print('file ready')
+
