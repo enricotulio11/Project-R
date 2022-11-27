@@ -1,5 +1,5 @@
-# Projeto-R
-Trabalho da faculdade sobre a caracterização de uma biblioteca de compostos químicos
+# Project-R
+# College work on the characterization of a library of chemical compounds
 # Library where the work consists-------->https://www.chemdiv.com/catalog/diversity-libraries/smarttm-library/
 
 pip install rdkit
