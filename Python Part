@@ -21,16 +21,23 @@ from rdkit.Chem.ChemUtils import SDFToCSV
 import csv
 from rdkit import Chem, RDLogger
 from rdkit.Chem import Descriptors, MolSurf, rdMolDescriptors, AllChem, Draw
+from google.colab import drive
+drive.mount('/content/drive')
+
+from google.colab import data_table
+data_table.enable_dataframe_formatter()
 
 SmartTM = '/content/SmartTM_Library.sdf'
 df = PandasTools.LoadSDF(SmartTM)
-
-sdf_file1 = SmartTM
 
 df.head()
 
 df.info()
 
+### Elimination of two columns (logD and Saltdata)
+df = df.drop(columns=['Saltdata','logD'])
+
+### Definition the suppl
 suppl = Chem.SDMolSupplier('/content/SmartTM_Library.sdf')
 n_mols = len(suppl)
 
@@ -70,39 +77,78 @@ Descriptors.MolLogP(m)
 Lipinski.RingCount(m)
 
 ### Calculation of the Descriptors of each Molecule
-all_mols = Chem.SDMolSupplier(sdf_file1)
-mol = all_mols[0]
+all_mols = Chem.SDMolSupplier(SmartTM)
 
-all_mols = Chem.SDMolSupplier(sdf_file1)
-nmols = len(all_mols)
-cont_error = 0
-str_csv_file = ''
-print(nmols)
-
-dados = []
-dados.append(Chem.MolToSmiles(mol))
-dados.append(rdMolDescriptors.CalcMolFormula(mol))
-dados.append(round(Descriptors.ExactMolWt(mol),2))
-dados.append(round(Descriptors.MolLogP(mol),2))
-dados.append(Descriptors.NumHAcceptors(mol))
-dados.append(Descriptors.NumHDonors(mol))
-dados.append(rdMolDescriptors.CalcNumRotatableBonds(mol))
-dados.append(Descriptors.RingCount(mol))
-dados.append(round(MolSurf.TPSA(mol),2))
-Chem.MolToMolBlock
-
-print(str(dados))
-
+Smiles = []
+NumAtoms = []
+ExactMolWt = []
+MolLogP = []
+NumHAcceptors = []
+NumHDonors = []
+Ring_Count = []
+TPSA = []
+NumRotatableBonds = []
+Molecular_Formula = []
+for x in range(0, len(all_mols)):
+  if all_mols[x] is None:continue
+  NumAtoms.append(all_mols[x].GetNumAtoms())
+  Smiles.append(Chem.MolToSmiles(all_mols[x]))
+  ExactMolWt.append(Descriptors.ExactMolWt(all_mols[x]))
+  NumHAcceptors.append(Lipinski.NumHAcceptors(all_mols[x]))
+  NumHDonors.append(Lipinski.NumHDonors(all_mols[x]))
+  MolLogP.append(Crippen.MolLogP(all_mols[x]))
+  Molecular_Formula.append(rdMolDescriptors.CalcMolFormula(all_mols[x]))
+  Ring_Count.append(Lipinski.RingCount(all_mols[x]))
+  NumRotatableBonds.append(Lipinski.NumRotatableBonds(all_mols[x]))
+  TPSA.append(Descriptors.TPSA(all_mols[x]))
+  
 ### Converting to CSV
-str_csv_file = ''
-for mol in all_mols:
-  if mol is not None:
-    try:
-      str_csv_file = ''.join([str_csv_file, ','.join([str(Chem.MolToSmiles(mol)),str(round(Descriptors.MolLogP(mol),2)),str(Descriptors.NumHAceeptors(mol)),str(NumHDonors(mol)),str(rdMolDescriptors.CalcNumRotatableBonds(mol)),str(Descriptors.RingCount(mol)),str(round(MolSurf.TPSA(mol),2))]), '\n '])
-    except:
-        cont_error += 1
-print('str_csv_file ready', cont_error)        
-open('/content/drive/MyDrive/Colab Notebooks/SmartTM_Library.sdf', 'w').write(str_csv_file)
-print('file ready')
+all_mols = Chem.SDMolSupplier(SmartTM)
 
-pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Trabalho de R')
+Smiles = []
+NumAtoms = []
+ExactMolWt = []
+MolLogP = []
+NumHAcceptors = []
+NumHDonors = []
+Ring_Count = []
+TPSA = []
+NumRotatableBonds = []
+Molecular_Formula = []
+for x in range(0, len(all_mols)):
+  if all_mols[x] is None:continue
+  NumAtoms.append(all_mols[x].GetNumAtoms())
+  Smiles.append(Chem.MolToSmiles(all_mols[x]))
+  ExactMolWt.append(Descriptors.ExactMolWt(all_mols[x]))
+  NumHAcceptors.append(Lipinski.NumHAcceptors(all_mols[x]))
+  NumHDonors.append(Lipinski.NumHDonors(all_mols[x]))
+  MolLogP.append(Crippen.MolLogP(all_mols[x]))
+  Molecular_Formula.append(rdMolDescriptors.CalcMolFormula(all_mols[x]))
+  Ring_Count.append(Lipinski.RingCount(all_mols[x]))
+  NumRotatableBonds.append(Lipinski.NumRotatableBonds(all_mols[x]))
+  TPSA.append(Descriptors.TPSA(all_mols[x]))
+
+Smart_ID = df.IDNUMBER
+
+Smart_ID
+
+i = {'df.IDNUMBER': Smart_ID,
+     'Smiles': Smiles,
+    'Molecular_Formula': Molecular_Formula,
+    'NumAtoms': NumAtoms,
+    'ExactMolWt': ExactMolWt,
+    'NumRotatableBonds': NumRotatableBonds,
+    'MolLogP': MolLogP,
+    'Ring_Count': Ring_Count,
+    'NumHAcceptors': NumHAcceptors,
+    'TPSA': TPSA,
+    'NumHDonors': NumHDonors,
+
+}
+
+pd.DataFrame(i).to_csv('SmartTM.csv', sep = ';')
+
+Particles_Description = pd.DataFrame(data=i)
+
+Particles_Description
+###-----------------------F I N I S H-----P A R T 1------------------>>>>>>>>
