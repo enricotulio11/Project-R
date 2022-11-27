@@ -100,8 +100,9 @@ for mol in all_mols:
     try:
       str_csv_file = ''.join([str_csv_file, ','.join([str(Chem.MolToSmiles(mol)),str(round(Descriptors.MolLogP(mol),2)),str(Descriptors.NumHAceeptors(mol)),str(NumHDonors(mol)),str(rdMolDescriptors.CalcNumRotatableBonds(mol)),str(Descriptors.RingCount(mol)),str(round(MolSurf.TPSA(mol),2))]), '\n '])
     except:
-        cont_error +- 1
+        cont_error += 1
 print('str_csv_file ready', cont_error)        
-open('SmartTM', 'w').write(str_csv_file)
+open('/content/drive/MyDrive/Colab Notebooks/SmartTM_Library.sdf', 'w').write(str_csv_file)
 print('file ready')
 
+pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Trabalho de R')
