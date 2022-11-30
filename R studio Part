@@ -1,0 +1,37 @@
+# Project-R
+College work on the characterization of a library of chemical compounds
+install.packages("dslabs")
+install.packages("dplyr")
+install.packages("data.table")
+install.packages("esquisse")
+library(dslabs)
+library(dplyr)
+library(data.table)
+
+d <- read.csv("dataSmartTM.csv")
+str(d)
+
+library(ggplot2)
+ggplot(dataSmartTM) +
+ aes(x = NumHAcceptors, y = NumHDonors) +
+ geom_jitter(size = 0.5) +
+ theme_minimal()
+
+library(ggplot2)
+
+ggplot(dataSmartTM) +
+ aes(x = NumAtoms, y = Ring_Count) +
+ geom_jitter(size = 1.5) +
+ theme_minimal()
+
+ggplot(dataSmartTM) +
+ aes(x = NumAtoms, y = ExactMolWt) +
+ geom_jitter(size = 1.5) +
+ theme_minimal()
+
+ggplot(dataSmartTM) +
+ aes(x = NumAtoms, y = NumRotatableBonds) +
+ geom_jitter(size = 1.5) +
+ theme_minimal()
+ 
+ ###--------F I N I S H---F I N A L---P A R T--------------
