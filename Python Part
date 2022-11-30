@@ -2,6 +2,7 @@
 # College work on the characterization of a library of chemical compounds
 # Library where the work consists-------->https://www.chemdiv.com/catalog/diversity-libraries/smarttm-library/
 
+###import of the tools necessary for processing the algorithm
 pip install rdkit
 pip install pandas 
 import pandas as pd
@@ -25,8 +26,11 @@ from google.colab import drive
 drive.mount('/content/drive')
 
 from google.colab import data_table
+
+### the collum limit in a table allowed by the google colab environment was preventing the movement of the code and with this command it is possible to format this limit.
 data_table.enable_dataframe_formatter()
 
+### SDF library definition as SmartTM and Pandas tool definition as df.
 SmartTM = '/content/SmartTM_Library.sdf'
 df = PandasTools.LoadSDF(SmartTM)
 
