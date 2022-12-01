@@ -107,31 +107,6 @@ for x in range(0, len(all_mols)):
   TPSA.append(Descriptors.TPSA(all_mols[x]))
   
 ### Converting to CSV
-all_mols = Chem.SDMolSupplier(SmartTM)
-
-Smiles = []
-NumAtoms = []
-ExactMolWt = []
-MolLogP = []
-NumHAcceptors = []
-NumHDonors = []
-Ring_Count = []
-TPSA = []
-NumRotatableBonds = []
-Molecular_Formula = []
-for x in range(0, len(all_mols)):
-  if all_mols[x] is None:continue
-  NumAtoms.append(all_mols[x].GetNumAtoms())
-  Smiles.append(Chem.MolToSmiles(all_mols[x]))
-  ExactMolWt.append(Descriptors.ExactMolWt(all_mols[x]))
-  NumHAcceptors.append(Lipinski.NumHAcceptors(all_mols[x]))
-  NumHDonors.append(Lipinski.NumHDonors(all_mols[x]))
-  MolLogP.append(Crippen.MolLogP(all_mols[x]))
-  Molecular_Formula.append(rdMolDescriptors.CalcMolFormula(all_mols[x]))
-  Ring_Count.append(Lipinski.RingCount(all_mols[x]))
-  NumRotatableBonds.append(Lipinski.NumRotatableBonds(all_mols[x]))
-  TPSA.append(Descriptors.TPSA(all_mols[x]))
-
 Smart_ID = df.IDNUMBER
 
 Smart_ID
