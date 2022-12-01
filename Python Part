@@ -150,9 +150,12 @@ i = {'df.IDNUMBER': Smart_ID,
 
 }
 
-pd.DataFrame(i).to_csv('SmartTM.csv', sep = ';')
+pd.DataFrame(i).to_csv('dataSmartTM.csv')
 
 Particles_Description = pd.DataFrame(data=i)
 
 Particles_Description
+
+### Library SDF converted to CSV file
+
 ###-----------------------F I N I S H-----P A R T 1------------------>>>>>>>>
